@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import connectDB from './config/db';
 import authRoutes from './routes/auth';
+import roomRoutes from './routes/room';
 import cookieParser from 'cookie-parser'; 
 import errorHandler from './middlewares/errorHandler'; 
 
@@ -21,8 +22,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/auth', authRoutes);
 
-
-
+app.use('/api/rooms', roomRoutes); 
 
 
 app.use(errorHandler);
