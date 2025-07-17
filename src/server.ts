@@ -5,6 +5,7 @@ import authRoutes from './routes/auth';
 import roomRoutes from './routes/room';
 import cookieParser from 'cookie-parser'; 
 import errorHandler from './middlewares/errorHandler'; 
+import bodyParser from 'body-parser';
 
 dotenv.config();
 
@@ -15,6 +16,9 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
+
 
 app.get('/', (req, res) => {
   res.send('Chat Backend API is running!');
