@@ -11,7 +11,7 @@ declare global {
 }
 
 const authorize = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.cookies.token || req.headers.authorization?.split(' ')[1];
+  const token = req.cookies.auth_token || req.headers.authorization?.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ message: 'No token, authorization denied' });
@@ -25,13 +25,11 @@ const authorize = (req: Request, res: Response, next: NextFunction) => {
     }
 
     const decoded = jwt.verify(token, jwtSecret) as { id: string }; 
-
     req.userId = decoded.id;
 
     next();
   } catch (error) {
     console.error('Token verification failed:', error);
-    res.clearCookie('token');
     res.status(401).json({ message: 'Token is not valid or expired' });
   }
 };
