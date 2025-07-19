@@ -23,6 +23,7 @@ export const createRoom = async (
       description,
       owner: ownerId,
       members: [ownerId],
+      code: new mongoose.Types.ObjectId().toString() + Math.random().toString(36).substring(2, 8) 
     });
 
     await newRoom.save();
@@ -113,9 +114,9 @@ export const getRoomsOfUser = async (
   }
 };
 
-export const joinRoom = async (roomId: string, userId: string): Promise<RoomServiceResponse> => {
+export const joinRoom = async (code: string, userId: string): Promise<RoomServiceResponse> => {
   try {
-    const room = await Room.findById(roomId);
+    const room = await Room.findOne({code});
 
     if (!room) {
       throw new AppError('Room not found.', 404);
@@ -130,9 +131,8 @@ export const joinRoom = async (roomId: string, userId: string): Promise<RoomServ
     room.members.push(new mongoose.Types.ObjectId(userId));
     await room.save();
 
-    const populatedRoom = await Room.findById(roomId).populate('owner', 'username email').populate('members', 'username email');
 
-    return { room: populatedRoom! };
+    return { room };
   } catch (error: any) {
     console.error('Room service (joinRoom) error:', error);
     if (error instanceof AppError) {

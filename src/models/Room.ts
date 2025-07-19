@@ -14,6 +14,11 @@ const RoomSchema: Schema = new Schema({
     required: true,
     trim: true,
   },
+  code: {
+    type: String,
+    required: true,
+    unique: true
+  },
   owner: {
     type: mongoose.Types.ObjectId,
     ref: 'User', 

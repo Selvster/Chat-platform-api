@@ -24,6 +24,6 @@ router
   .patch(updateRoomController)
   .delete(deleteRoomController);
 
-router.route("/:id/join").post(joinRoomController);
+router.route("/:code/join").post(joinRoomController);
 
 export default router;

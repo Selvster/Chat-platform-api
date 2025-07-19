@@ -134,14 +134,14 @@ export const getRoomsOfUserController = catchAsync(
 );
 
 export const joinRoomController = catchAsync(async (req: Request, res: Response) => {
-  const { id } = req.params; 
+  const { code } = req.params; 
   const userId = req.userId;
 
   if (!userId) {
     throw new AppError('User not authenticated.', 401);
   }
 
-  const result = await joinRoom(id, userId); 
+  const result = await joinRoom(code, userId); 
 
   res.status(200).json({
     status: 'success',
