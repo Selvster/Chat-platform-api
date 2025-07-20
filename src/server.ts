@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import connectDB from './config/db';
 import authRoutes from './routes/auth';
 import roomRoutes from './routes/room';
+import messageRoutes from './routes/message';
 import cookieParser from 'cookie-parser'; 
 import errorHandler from './middlewares/errorHandler'; 
 import bodyParser from 'body-parser';
@@ -32,6 +33,8 @@ app.get('/', (req, res) => {
 app.use('/api/auth', authRoutes);
 
 app.use('/api/rooms', roomRoutes); 
+
+app.use('/api/rooms', messageRoutes);
 
 
 app.use(errorHandler);
