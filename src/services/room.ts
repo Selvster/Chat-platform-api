@@ -141,3 +141,33 @@ export const joinRoom = async (code: string, userId: string): Promise<RoomServic
     throw new AppError('Server error joining room.', 500);
   }
 };
+
+export const leaveRoom = async (roomId: string, userId: string): Promise<RoomServiceResponse> => {
+  try {
+    const room = await Room.findById(roomId);
+
+    if (!room) {
+      throw new AppError('Room not found.', 404);
+    }
+    const isMember = room.members.some(memberId => memberId.toString() === userId);
+
+    if (!isMember) {
+      throw new AppError('You are not a member of this room.', 400);
+    }
+
+    if (room.owner.toString() === userId) {
+      throw new AppError('Owner cannot leave the room.', 403);
+    }
+
+    room.members = room.members.filter(memberId => memberId.toString() !== userId);
+    await room.save();
+    return { room };
+  }
+  catch (error: any) {
+    console.error('Room service (leaveRoom) error:', error);
+    if (error instanceof AppError) {
+      throw error;
+    }
+    throw new AppError('Server error leaving room.', 500);
+  } 
+};

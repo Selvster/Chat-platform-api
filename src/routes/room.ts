@@ -7,6 +7,7 @@ import {
   deleteRoomController,
   getRoomsOfUserController,
   joinRoomController,
+  leaveRoomController
 } from "../controllers/room";
 import authorize from "../middlewares/authorize";
 
@@ -25,5 +26,7 @@ router
   .delete(deleteRoomController);
 
 router.route("/:code/join").post(joinRoomController);
+
+router.route("/:id/leave").post(leaveRoomController);
 
 export default router;

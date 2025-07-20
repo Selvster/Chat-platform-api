@@ -7,6 +7,7 @@ import {
   deleteRoom,
   getRoomsOfUser,
   joinRoom,
+  leaveRoom,
 } from "../services/room";
 import { createRoomSchema, updateRoomSchema } from "../validations/room";
 import catchAsync from "../utils/CatchAsync";
@@ -133,19 +134,39 @@ export const getRoomsOfUserController = catchAsync(
   }
 );
 
-export const joinRoomController = catchAsync(async (req: Request, res: Response) => {
-  const { code } = req.params; 
-  const userId = req.userId;
+export const joinRoomController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { code } = req.params;
+    const userId = req.userId;
 
-  if (!userId) {
-    throw new AppError('User not authenticated.', 401);
+    if (!userId) {
+      throw new AppError("User not authenticated.", 401);
+    }
+
+    const result = await joinRoom(code, userId);
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully joined the room!",
+      data: { room: result.room },
+    });
   }
+);
 
-  const result = await joinRoom(code, userId); 
+export const leaveRoomController = catchAsync(
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+    const userId = req.userId;
+    if (!userId) {
+      throw new AppError("User not authenticated.", 401);
+    }
 
-  res.status(200).json({
-    status: 'success',
-    message: 'Successfully joined the room!',
-    data: { room: result.room },
-  });
-});
+    const result = await leaveRoom(id, userId);
+
+    res.status(200).json({
+      status: "success",
+      message: "Successfully left the room!",
+      data: { room: result.room },
+    });
+  }
+);
